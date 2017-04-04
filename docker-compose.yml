@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+
+  scalar_app:
+    build: scalar/build/app
+    container_name: scalar_app
+    restart: always
+    environment:
+      - SCALAR_DB_HOSTNAME=scalar_db
+      - SCALAR_DB_USERNAME=scalar_app
+      - SCALAR_DB_PASSWORD=dbapppw
+      - SCALAR_DB_DATABASE=scalar_app
+      - SCALAR_SHASALT='insert_something_here'
+      - SCALAR_RECAPTCHA_PUBLIC_KEY='your_key'
+      - SCALAR_RECAPTCHA_PRIVATE_KEY='your_key'
+      - SCALAR_ENCRYPTION_KEY='a_key'
+#      - SCALAR_COOKIE_DOMAIN='.ecrituresnumeriques.ca'
+#      - SCALAR_COOKIE_PREFIX='ecrnum_'
+      - SCALAR_INSTALL_NAME=EcrituresNumeriques
+      - SCALAR_SOUNDCLOUD_ID=''
+      - SCALAR_DPLA_KEY=''
+      - SCALAR_FLOWPLAYER_KEY=''
+      - SCALAR_GOOGLE_MAPS_KEY='a_key'
+      - SCALAR_EMAIL_REPLYTO_ADDRESS='scalar@ecrituresnumeriques.ca'
+      - SCALAR_EMAIL_REPLYTO_NAME='Scalar UdM'
+      - SCALAR_SMTP_HOST=localhost
+      - SCALAR_SMTP_USERNAME=''
+      - SCALAR_SMTP_PASSWORD=''
+    networks:
+      - scalar_net
+
+  scalar_db:
+    image: mysql:5.5
+    container_name: scalar_db
+    restart: always
+    volumes:
+      - /docker/scalar/persistent/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=dbrootpw
+    networks:
+      - scalar_net
+
+networks:
+  scalar_net:
+    driver: bridge
